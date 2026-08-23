@@ -25,8 +25,8 @@
   },
   "homepage": "",
   "devDependencies": {
+    "@babel/preset-env": "^8.0.2",
     "@eslint/js": "^10.0.1",
-    "babel": "^5.8.38",
     "css-loader": "^7.1.4",
     "eslint": "^10.3.0",
     "globals": "^17.6.0",
