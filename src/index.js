@@ -1,4 +1,4 @@
-import './styles.css'
+//import './styles.css'
 
 // class use to create instances of different root nodes and their
 // left and right sub-trees
@@ -110,10 +110,12 @@ class Tree {
     return checkIfTreeIncludes(this.root);
   };
 
-  insert(value) {
+  insertRecursively(value) {
     Tree.checkIfNumIsInteger(value);
+    if (this.includes(value) === true) return;
 
     function searchForPlaceToInsertNode(root) {
+
       if (root.leftNode === null && root.value > value) {
         root.leftNode = new Node(value);
         return;
@@ -132,6 +134,65 @@ class Tree {
     return searchForPlaceToInsertNode(this.root);
   };
 
+  insertIteratively(value) {
+    Tree.checkIfNumIsInteger(value);
+    if (this.includes(value) === true) return;
+
+    let tempRoot = this.root;
+
+    while(tempRoot !== null) {
+      if (tempRoot.value > value) {
+        if (tempRoot.leftNode === null) {
+          tempRoot.leftNode = new Node(value);
+          break;
+        };
+        tempRoot = tempRoot.leftNode;
+        continue;
+      };
+      if (tempRoot.value < value) {
+        if (tempRoot.rightNode === null) {
+          tempRoot.rightNode = new Node(value);
+          break;
+        };
+        tempRoot = tempRoot.rightNode;
+        continue;
+      };
+    };
+    
+    return this.root;
+  };
+
+  deleteItemRecursively(value) {
+    if (this.includes(value) === false) return;
+
+    let tempRootNodeOfValSearched = this.root;
+    function deleteItem(root) {
+      if (root.value !== value) {
+        if (root.value > value) {
+          tempRootNodeOfValSearched = root; 
+          return deleteItem(root.leftNode);
+        } else {
+          tempRootNodeOfValSearched = root;
+          return deleteItem(root.rightNode);
+        };
+      };
+      return tempRootNodeOfValSearched;
+    };
+    deleteItem(this.root);
+
+    let tempNodeOfValSearched;
+    if (tempRootNodeOfValSearched.leftNode.value === value) {
+      tempNodeOfValSearched = tempRootNodeOfValSearched.leftNode;
+    } else {
+      tempNodeOfValSearched = tempRootNodeOfValSearched.rightNode;
+    };
+
+    if (tempNodeOfValSearched.leftNode === null &&
+        tempNodeOfValSearched.rightNode === null) {
+      ;
+    };
+  };
+
 };
 
 const arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
@@ -139,5 +200,7 @@ const arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
 const myTree = new Tree(arr);
 
 console.log(myTree.root);
-console.log(myTree.includes(1));
-console.log(myTree.insert(22));
+//console.log(myTree.includes(1));
+//console.log(myTree.insertRecursively(22));
+//console.log(myTree.insertIteratively(22));
+console.log(myTree.deleteItemRecursively(1));
