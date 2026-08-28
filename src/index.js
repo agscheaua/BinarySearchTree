@@ -22,6 +22,7 @@ class Tree {
   // removes any duplicates from the array given as an argument
 
   static removeDuplicatesFromArr(arr) {
+    if (!(Array.isArray(arr))) throw new Error("The argument is not an array.");
     const mySet = new Set(arr);
     const arrWithoutDuplicates = Array.from(mySet.values());
     return arrWithoutDuplicates;
@@ -88,9 +89,13 @@ class Tree {
     return new Node(arr[middleOfArr], this.#buildTree(leftHalfOfTheArr), this.#buildTree(rightHalfOfArr));
   };
 
+  // check if the inserted argument is a integer
+
   static checkIfNumIsInteger(num) {
     if (!(Number.isInteger(num))) throw new Error("The argument is not an integer.");
   }
+
+  // check if a value exist in the tree
 
   includes(value) {
     Tree.checkIfNumIsInteger(value);
@@ -109,6 +114,8 @@ class Tree {
 
     return checkIfTreeIncludes(this.root);
   };
+
+  // insert a new node in the tree recursively
 
   insertRecursively(value) {
     Tree.checkIfNumIsInteger(value);
@@ -133,6 +140,8 @@ class Tree {
 
     return searchForPlaceToInsertNode(this.root);
   };
+
+  // insert a new node in the tree iteratively
 
   insertIteratively(value) {
     Tree.checkIfNumIsInteger(value);
@@ -162,35 +171,36 @@ class Tree {
     return this.root;
   };
 
+  // delete a node in the tree recursively
+
   deleteItemRecursively(value) {
     if (this.includes(value) === false) return;
 
+    let tempParentOfRootNode;
     let tempRootNodeOfValSearched = this.root;
-    function deleteItem(root) {
+
+    function findNodeAndParentOfNodeToBeDeleted(root) {
       if (root.value !== value) {
         if (root.value > value) {
-          tempRootNodeOfValSearched = root; 
-          return deleteItem(root.leftNode);
+          tempParentOfRootNode = root; 
+          tempRootNodeOfValSearched = root.leftNode;
+          return findNodeAndParentOfNodeToBeDeleted(root.leftNode);
         } else {
-          tempRootNodeOfValSearched = root;
-          return deleteItem(root.rightNode);
+          tempParentOfRootNode = root; 
+          tempRootNodeOfValSearched = root.rightNode;
+          return findNodeAndParentOfNodeToBeDeleted(root.rightNode);
         };
       };
-      return tempRootNodeOfValSearched;
     };
-    deleteItem(this.root);
+    findNodeAndParentOfNodeToBeDeleted(this.root);
 
-    let tempNodeOfValSearched;
-    if (tempRootNodeOfValSearched.leftNode.value === value) {
-      tempNodeOfValSearched = tempRootNodeOfValSearched.leftNode;
-    } else {
-      tempNodeOfValSearched = tempRootNodeOfValSearched.rightNode;
-    };
+    function deleteNodeInTree(root) {
+      if (root.leftNode.value !== value) return;
+      if (root.rightNode.value !== value) return;
+    }
 
-    if (tempNodeOfValSearched.leftNode === null &&
-        tempNodeOfValSearched.rightNode === null) {
-      ;
-    };
+    console.log(tempParentOfRootNode);
+    console.log(tempRootNodeOfValSearched);
   };
 
 };
