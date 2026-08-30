@@ -173,7 +173,7 @@ class Tree {
 
   // delete a node in the tree recursively
 
-  deleteItemRecursively(value) {
+  deleteItem(value) {
     if (this.includes(value) === false) return;
 
     let tempParentOfRootNode;
@@ -194,10 +194,99 @@ class Tree {
     };
     findNodeAndParentOfNodeToBeDeleted(this.root);
 
-    function deleteNodeInTree(root) {
-      if (root.leftNode.value !== value) return;
-      if (root.rightNode.value !== value) return;
-    }
+    function deleteNodeInTree(rootVal = tempRootNodeOfValSearched.value) {
+      if (tempRootNodeOfValSearched.leftNode === null &&
+          tempRootNodeOfValSearched.rightNode === null) {
+        if (tempParentOfRootNode.leftNode.value === rootVal) {
+          tempParentOfRootNode.leftNode = null;
+          return;
+        };
+        if (tempParentOfRootNode.rightNode.value === rootVal) {
+          tempParentOfRootNode.rightNode = null;
+          return;
+        };
+      };
+
+      if ((tempRootNodeOfValSearched.leftNode !== null &&
+          tempRootNodeOfValSearched.rightNode === null) ||
+          (tempRootNodeOfValSearched.leftNode === null &&
+          tempRootNodeOfValSearched.rightNode !== null)) {
+
+        if (tempParentOfRootNode.leftNode.value === rootVal) {
+          let newNodeToInsert;
+          if (tempRootNodeOfValSearched.leftNode === null) {
+            newNodeToInsert = tempRootNodeOfValSearched.rightNode; 
+          };
+          if (tempRootNodeOfValSearched.rightNode === null) {
+            newNodeToInsert = tempRootNodeOfValSearched.leftNode;
+          };
+          tempParentOfRootNode.leftNode = newNodeToInsert;
+          return;
+        };
+
+        if (tempParentOfRootNode.rightNode.value === rootVal) {
+          let newNodeToInsert;
+          if (tempRootNodeOfValSearched.leftNode === null) {
+            newNodeToInsert = tempRootNodeOfValSearched.rightNode; 
+          };
+          if (tempRootNodeOfValSearched.rightNode === null) {
+            newNodeToInsert = tempRootNodeOfValSearched.leftNode;
+          };
+          tempParentOfRootNode.rightNode = newNodeToInsert;
+          return;
+        };
+      };
+
+      if (tempRootNodeOfValSearched.leftNode !== null &&
+         tempRootNodeOfValSearched.rightNode !== null) {
+
+        let OLDTempParentOfRootNode = tempParentOfRootNode;
+        let OLDTempRootNodeOfValSearched = tempRootNodeOfValSearched;
+
+        let parentOfSuccesorOfValSearchToDel;
+        let successorOfValSearchToDel = tempRootNodeOfValSearched;
+        for (let i = 0;; i++) {
+          if (i === 0) {
+            parentOfSuccesorOfValSearchToDel = successorOfValSearchToDel;
+            successorOfValSearchToDel = successorOfValSearchToDel.rightNode;
+            continue; 
+          };
+          if (i > 0) {
+            if (successorOfValSearchToDel.leftNode !== null) {
+              parentOfSuccesorOfValSearchToDel = successorOfValSearchToDel;
+              successorOfValSearchToDel = successorOfValSearchToDel.leftNode;
+              continue;
+            };
+            if (successorOfValSearchToDel.leftNode === null) break;
+          };
+        };
+
+        tempParentOfRootNode = parentOfSuccesorOfValSearchToDel;
+        tempRootNodeOfValSearched = successorOfValSearchToDel;
+
+        deleteNodeInTree();
+
+        tempRootNodeOfValSearched.leftNode = OLDTempRootNodeOfValSearched.leftNode;
+        tempRootNodeOfValSearched.rightNode = OLDTempRootNodeOfValSearched.rightNode; 
+
+        if (OLDTempParentOfRootNode.leftNode.value === OLDTempRootNodeOfValSearched.value) {
+          OLDTempParentOfRootNode.leftNode = tempRootNodeOfValSearched;
+        };
+        if (OLDTempParentOfRootNode.rightNode.value === OLDTempRootNodeOfValSearched.value) {
+          OLDTempParentOfRootNode.rightNode = tempRootNodeOfValSearched;
+        };
+
+
+        console.log(OLDTempParentOfRootNode);
+        console.log(OLDTempRootNodeOfValSearched);
+
+
+      };
+
+
+    };
+    deleteNodeInTree();
+
 
     console.log(tempParentOfRootNode);
     console.log(tempRootNodeOfValSearched);
@@ -211,6 +300,6 @@ const myTree = new Tree(arr);
 
 console.log(myTree.root);
 //console.log(myTree.includes(1));
-//console.log(myTree.insertRecursively(22));
+console.log(myTree.insertRecursively(325));
 //console.log(myTree.insertIteratively(22));
-console.log(myTree.deleteItemRecursively(1));
+console.log(myTree.deleteItem(67));
