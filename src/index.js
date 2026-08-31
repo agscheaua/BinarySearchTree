@@ -171,12 +171,12 @@ class Tree {
     return this.root;
   };
 
-  // delete a node in the tree recursively
+  // delete a node in the tree 
 
   deleteItem(value) {
     if (this.includes(value) === false) return;
 
-    let tempParentOfRootNode;
+    let tempParentOfRootNode = this.root;
     let tempRootNodeOfValSearched = this.root;
 
     function findNodeAndParentOfNodeToBeDeleted(root) {
@@ -245,7 +245,7 @@ class Tree {
 
         let parentOfSuccesorOfValSearchToDel;
         let successorOfValSearchToDel = tempRootNodeOfValSearched;
-        for (let i = 0;; i++) {
+        for (let i = 0;;i++) {
           if (i === 0) {
             parentOfSuccesorOfValSearchToDel = successorOfValSearchToDel;
             successorOfValSearchToDel = successorOfValSearchToDel.rightNode;
@@ -275,31 +275,53 @@ class Tree {
         if (OLDTempParentOfRootNode.rightNode.value === OLDTempRootNodeOfValSearched.value) {
           OLDTempParentOfRootNode.rightNode = tempRootNodeOfValSearched;
         };
+        if (OLDTempParentOfRootNode.value === OLDTempRootNodeOfValSearched.value) {
+          OLDTempParentOfRootNode.value = tempRootNodeOfValSearched.value;
+          OLDTempParentOfRootNode.leftNode = tempRootNodeOfValSearched.leftNode;
+          OLDTempParentOfRootNode.rightNode = tempRootNodeOfValSearched.rightNode;
+        };
 
-
-        console.log(OLDTempParentOfRootNode);
-        console.log(OLDTempRootNodeOfValSearched);
-
-
+        return OLDTempParentOfRootNode;      
       };
-
-
     };
-    deleteNodeInTree();
-
-
-    console.log(tempParentOfRootNode);
-    console.log(tempRootNodeOfValSearched);
+    return deleteNodeInTree();
   };
+
+  deleteItemV2(value) {
+    if (this.includes(value) === false) return;
+
+    function searchForNodeThatWillBeDel(root, value) {
+      if (root.value === value) {
+        deleteNodeWhen1Child(root);
+        return; 
+      } else if (root.value > value) {
+        return searchForNodeThatWillBeDel(root.leftNode, value);
+      } else if (root.value < value) {
+        return searchForNodeThatWillBeDel(root.rightNode, value);
+      };
+    };
+    searchForNodeThatWillBeDel(this.root, value);
+   
+    function deleteNodeWhen1Child(root) {
+      if (root.leftNode === null &&
+          root.rightNode === null) {
+        root.value = null;
+      };
+    }
+
+
+  }
 
 };
 
 const arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
+//const arr = [8,4,20];
 
 const myTree = new Tree(arr);
 
 console.log(myTree.root);
 //console.log(myTree.includes(1));
-console.log(myTree.insertRecursively(325));
+//console.log(myTree.insertRecursively(325));
 //console.log(myTree.insertIteratively(22));
-console.log(myTree.deleteItem(67));
+//console.log(myTree.deleteItem(20));
+myTree.deleteItemV2(1);
