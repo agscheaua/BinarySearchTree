@@ -290,27 +290,111 @@ class Tree {
   deleteItemV2(value) {
     if (this.includes(value) === false) return;
 
+    let parentOfNodeToBeDeleted = this.root;
+    let nodeToBeDeleted = this.root;
+
     function searchForNodeThatWillBeDel(root, value) {
       if (root.value === value) {
-        deleteNodeWhen1Child(root);
+        deleteNodeWhenNodeIsLeaf(root);
+        deleteNodeWhenNodeHas1Child(root);
+        delteNodeWhenNodeHas2TwoChild(root);
         return; 
       } else if (root.value > value) {
+        parentOfNodeToBeDeleted = root;
+        nodeToBeDeleted = root.leftNode;
         return searchForNodeThatWillBeDel(root.leftNode, value);
       } else if (root.value < value) {
+        parentOfNodeToBeDeleted = root;
+        nodeToBeDeleted = root.rightNode;
         return searchForNodeThatWillBeDel(root.rightNode, value);
       };
     };
     searchForNodeThatWillBeDel(this.root, value);
    
-    function deleteNodeWhen1Child(root) {
+    function deleteNodeWhenNodeIsLeaf(root) {
       if (root.leftNode === null &&
           root.rightNode === null) {
-        root.value = null;
+        if (parentOfNodeToBeDeleted.leftNode.value === value) {
+          parentOfNodeToBeDeleted.leftNode = null;
+        } else {
+          parentOfNodeToBeDeleted.rightNode = null;
+        };
+      } else {
+        return;
       };
-    }
+    };
+
+    function deleteNodeWhenNodeHas1Child(root) {
+      if ((root.leftNode === null && root.rightNode !== null) ||
+          (root.leftNode !== null && root.rightNode === null)) {
+        if (parentOfNodeToBeDeleted.leftNode.value === value) {
+          if (nodeToBeDeleted.leftNode === null) {
+            parentOfNodeToBeDeleted.leftNode = nodeToBeDeleted.rightNode;
+          } else {
+            parentOfNodeToBeDeleted.leftNode = nodeToBeDeleted.leftNode;
+          };
+        };
+        if (parentOfNodeToBeDeleted.rightNode.value === value) {
+          if (nodeToBeDeleted.leftNode === null) {
+            parentOfNodeToBeDeleted.rightNode = nodeToBeDeleted.rightNode;
+          } else {
+            parentOfNodeToBeDeleted.rightNode = nodeToBeDeleted.leftNode;
+          }; 
+        };
+      } else {
+        return;
+      };
+    };
+
+    function delteNodeWhenNodeHas2TwoChild(root) {
+      if (root.leftNode !== null &&
+          root.rightNode !== null) {
+
+        const theSuccesorOfNodeToBeDeleted = findTheSuccesorOfNode(nodeToBeDeleted).theSuccesor;
+        const parentOftheSuccesorOfNodeToBeDeleted = findTheSuccesorOfNode(nodeToBeDeleted).parentOfTheSuccesor;
+        console.log(theSuccesorOfNodeToBeDeleted, parentOftheSuccesorOfNodeToBeDeleted);
+
+        let oldParentOfNodeToBeDeleted = parentOfNodeToBeDeleted;
+        let oldNodeToBeDeleted = nodeToBeDeleted;
+
+        parentOfNodeToBeDeleted = parentOftheSuccesorOfNodeToBeDeleted;
+        nodeToBeDeleted = theSuccesorOfNodeToBeDeleted;
+
+        searchForNodeThatWillBeDel(nodeToBeDeleted, nodeToBeDeleted.value);
+
+        //
+        
+      } else {
+        return;
+      };
+    };
+
+    function findTheSuccesorOfNode(node) {
+      let parentOfTheSuccesor = node;
+      let theSuccesor = node;
+
+      for (let i = 0;; i++) {
+        if (i === 0) {
+          parentOfTheSuccesor = theSuccesor;
+          theSuccesor = theSuccesor.rightNode;
+        };
+        if (i > 0) {
+          if (theSuccesor.leftNode === null) {
+            break;
+          }
+          parentOfTheSuccesor = theSuccesor;
+          theSuccesor = theSuccesor.leftNode;
+        };
+      };
+      return {
+        parentOfTheSuccesor,
+        theSuccesor,
+      };
+    };
 
 
-  }
+
+  };
 
 };
 
@@ -324,4 +408,4 @@ console.log(myTree.root);
 //console.log(myTree.insertRecursively(325));
 //console.log(myTree.insertIteratively(22));
 //console.log(myTree.deleteItem(20));
-myTree.deleteItemV2(1);
+myTree.deleteItemV2(4);
