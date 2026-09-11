@@ -173,118 +173,47 @@ class Tree {
 
   // delete a node in the tree 
 
-  deleteItem(value) {
-    if (this.includes(value) === false) return;
+  deleteItem(value, node) {
+    if (node === null) return null;
 
-    let tempParentOfRootNode = this.root;
-    let tempRootNodeOfValSearched = this.root;
+    if (value < node.value) {
+      node.leftNode = this.deleteItem(value, node.leftNode);
+    } else if (value > node.value) {
+      node.rightNode = this.deleteItem(value, node.rightNode);
 
-    function findNodeAndParentOfNodeToBeDeleted(root) {
-      if (root.value !== value) {
-        if (root.value > value) {
-          tempParentOfRootNode = root; 
-          tempRootNodeOfValSearched = root.leftNode;
-          return findNodeAndParentOfNodeToBeDeleted(root.leftNode);
-        } else {
-          tempParentOfRootNode = root; 
-          tempRootNodeOfValSearched = root.rightNode;
-          return findNodeAndParentOfNodeToBeDeleted(root.rightNode);
-        };
-      };
-    };
-    findNodeAndParentOfNodeToBeDeleted(this.root);
-
-    function deleteNodeInTree(rootVal = tempRootNodeOfValSearched.value) {
-      if (tempRootNodeOfValSearched.leftNode === null &&
-          tempRootNodeOfValSearched.rightNode === null) {
-        if (tempParentOfRootNode.leftNode.value === rootVal) {
-          tempParentOfRootNode.leftNode = null;
-          return;
-        };
-        if (tempParentOfRootNode.rightNode.value === rootVal) {
-          tempParentOfRootNode.rightNode = null;
-          return;
-        };
-      };
-
-      if ((tempRootNodeOfValSearched.leftNode !== null &&
-          tempRootNodeOfValSearched.rightNode === null) ||
-          (tempRootNodeOfValSearched.leftNode === null &&
-          tempRootNodeOfValSearched.rightNode !== null)) {
-
-        if (tempParentOfRootNode.leftNode.value === rootVal) {
-          let newNodeToInsert;
-          if (tempRootNodeOfValSearched.leftNode === null) {
-            newNodeToInsert = tempRootNodeOfValSearched.rightNode; 
+    } else if (value === node.value) {
+        if (node.leftNode === null &&
+            node.rightNode === null) {
+          return null;
+        } else if ((node.leftNode === null && node.rightNode !== null) ||
+                  (node.leftNode !== null && node.rightNode === null)) {
+          if (node.leftNode !== null) {
+            return node.leftNode;
+          } else {
+            return node.rightNode;
           };
-          if (tempRootNodeOfValSearched.rightNode === null) {
-            newNodeToInsert = tempRootNodeOfValSearched.leftNode;
-          };
-          tempParentOfRootNode.leftNode = newNodeToInsert;
-          return;
-        };
-
-        if (tempParentOfRootNode.rightNode.value === rootVal) {
-          let newNodeToInsert;
-          if (tempRootNodeOfValSearched.leftNode === null) {
-            newNodeToInsert = tempRootNodeOfValSearched.rightNode; 
-          };
-          if (tempRootNodeOfValSearched.rightNode === null) {
-            newNodeToInsert = tempRootNodeOfValSearched.leftNode;
-          };
-          tempParentOfRootNode.rightNode = newNodeToInsert;
-          return;
-        };
-      };
-
-      if (tempRootNodeOfValSearched.leftNode !== null &&
-         tempRootNodeOfValSearched.rightNode !== null) {
-
-        let OLDTempParentOfRootNode = tempParentOfRootNode;
-        let OLDTempRootNodeOfValSearched = tempRootNodeOfValSearched;
-
-        let parentOfSuccesorOfValSearchToDel;
-        let successorOfValSearchToDel = tempRootNodeOfValSearched;
-        for (let i = 0;;i++) {
-          if (i === 0) {
-            parentOfSuccesorOfValSearchToDel = successorOfValSearchToDel;
-            successorOfValSearchToDel = successorOfValSearchToDel.rightNode;
-            continue; 
-          };
-          if (i > 0) {
-            if (successorOfValSearchToDel.leftNode !== null) {
-              parentOfSuccesorOfValSearchToDel = successorOfValSearchToDel;
-              successorOfValSearchToDel = successorOfValSearchToDel.leftNode;
-              continue;
+        } else if (node.leftNode !== null && node.rightNode !== null) {
+          
+          let root = node;
+          let i = 0;
+          while(root !== null) {
+            if (i === 0) {
+              root = root.rightNode;
+              i++
+              if (root.leftNode === null) break;
+            } else {
+              root = root.leftNode;
+              if (root.leftNode === null) break;
             };
-            if (successorOfValSearchToDel.leftNode === null) break;
           };
+
+          this.deleteItem(root.value, node);
+          return node.value = root.value;
         };
-
-        tempParentOfRootNode = parentOfSuccesorOfValSearchToDel;
-        tempRootNodeOfValSearched = successorOfValSearchToDel;
-
-        deleteNodeInTree();
-
-        tempRootNodeOfValSearched.leftNode = OLDTempRootNodeOfValSearched.leftNode;
-        tempRootNodeOfValSearched.rightNode = OLDTempRootNodeOfValSearched.rightNode; 
-
-        if (OLDTempParentOfRootNode.leftNode.value === OLDTempRootNodeOfValSearched.value) {
-          OLDTempParentOfRootNode.leftNode = tempRootNodeOfValSearched;
-        };
-        if (OLDTempParentOfRootNode.rightNode.value === OLDTempRootNodeOfValSearched.value) {
-          OLDTempParentOfRootNode.rightNode = tempRootNodeOfValSearched;
-        };
-        if (OLDTempParentOfRootNode.value === OLDTempRootNodeOfValSearched.value) {
-          OLDTempParentOfRootNode.value = tempRootNodeOfValSearched.value;
-          OLDTempParentOfRootNode.leftNode = tempRootNodeOfValSearched.leftNode;
-          OLDTempParentOfRootNode.rightNode = tempRootNodeOfValSearched.rightNode;
-        };
-
-        return OLDTempParentOfRootNode;      
-      };
     };
-    return deleteNodeInTree();
+
+
+    return node;
   };
 
   deleteItemV2(value) {
@@ -295,9 +224,9 @@ class Tree {
 
     function searchForNodeThatWillBeDel(root, value) {
       if (root.value === value) {
-        deleteNodeWhenNodeIsLeaf(root);
-        deleteNodeWhenNodeHas1Child(root);
-        delteNodeWhenNodeHas2TwoChild(root);
+        deleteNodeWhenNodeIsLeaf(root, value);
+        deleteNodeWhenNodeHas1Child(root, value);
+        delteNodeWhenNodeHas2TwoChild(root, value);
         return; 
       } else if (root.value > value) {
         parentOfNodeToBeDeleted = root;
@@ -311,7 +240,7 @@ class Tree {
     };
     searchForNodeThatWillBeDel(this.root, value);
    
-    function deleteNodeWhenNodeIsLeaf(root) {
+    function deleteNodeWhenNodeIsLeaf(root, value) {
       if (root.leftNode === null &&
           root.rightNode === null) {
         if (parentOfNodeToBeDeleted.leftNode.value === value) {
@@ -324,7 +253,7 @@ class Tree {
       };
     };
 
-    function deleteNodeWhenNodeHas1Child(root) {
+    function deleteNodeWhenNodeHas1Child(root, value) {
       if ((root.leftNode === null && root.rightNode !== null) ||
           (root.leftNode !== null && root.rightNode === null)) {
         if (parentOfNodeToBeDeleted.leftNode.value === value) {
@@ -346,14 +275,13 @@ class Tree {
       };
     };
 
-    function delteNodeWhenNodeHas2TwoChild(root) {
+    function delteNodeWhenNodeHas2TwoChild(root, value) {
       if (root.leftNode !== null &&
           root.rightNode !== null) {
 
+        const parentOftheSuccesorOfNodeToBeDeleted = findTheSuccesorOfNode(nodeToBeDeleted).parentOfTheSuccesor;    
         const theSuccesorOfNodeToBeDeleted = findTheSuccesorOfNode(nodeToBeDeleted).theSuccesor;
-        const parentOftheSuccesorOfNodeToBeDeleted = findTheSuccesorOfNode(nodeToBeDeleted).parentOfTheSuccesor;
-        console.log(theSuccesorOfNodeToBeDeleted, parentOftheSuccesorOfNodeToBeDeleted);
-
+              
         let oldParentOfNodeToBeDeleted = parentOfNodeToBeDeleted;
         let oldNodeToBeDeleted = nodeToBeDeleted;
 
@@ -362,6 +290,16 @@ class Tree {
 
         searchForNodeThatWillBeDel(nodeToBeDeleted, nodeToBeDeleted.value);
 
+        console.log(theSuccesorOfNodeToBeDeleted, parentOftheSuccesorOfNodeToBeDeleted);
+
+        theSuccesorOfNodeToBeDeleted.leftNode = oldNodeToBeDeleted.leftNode;
+        theSuccesorOfNodeToBeDeleted.rightNode = oldNodeToBeDeleted.rightNode;
+
+        if (oldParentOfNodeToBeDeleted.leftNode.value === oldNodeToBeDeleted.value) {
+          oldParentOfNodeToBeDeleted.leftNode = theSuccesorOfNodeToBeDeleted;
+        } else {
+          oldParentOfNodeToBeDeleted.rightNode = theSuccesorOfNodeToBeDeleted;
+        }
         //
         
       } else {
@@ -398,8 +336,8 @@ class Tree {
 
 };
 
-const arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
-//const arr = [8,4,20];
+//const arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
+const arr = [10, 5, 20, 15, 21, 23, 29];
 
 const myTree = new Tree(arr);
 
@@ -408,4 +346,8 @@ console.log(myTree.root);
 //console.log(myTree.insertRecursively(325));
 //console.log(myTree.insertIteratively(22));
 //console.log(myTree.deleteItem(20));
-myTree.deleteItemV2(4);
+myTree.deleteItem(21, myTree.root);
+myTree.deleteItem(29, myTree.root);
+myTree.deleteItem(20, myTree.root);
+myTree.deleteItem(23, myTree.root);
+console.log(myTree);
