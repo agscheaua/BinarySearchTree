@@ -184,170 +184,69 @@ class Tree {
     } else if (value === node.value) {
         if (node.leftNode === null &&
             node.rightNode === null) {
+          if (this.root.value === value) {
+            return this.root = null;
+          };
+
           return null;
         } else if ((node.leftNode === null && node.rightNode !== null) ||
                   (node.leftNode !== null && node.rightNode === null)) {
-          if (node.leftNode !== null) {
-            return node.leftNode;
-          } else {
-            return node.rightNode;
-          };
-        } else if (node.leftNode !== null && node.rightNode !== null) {
-          
-          let root = node;
-          let i = 0;
-          while(root !== null) {
-            if (i === 0) {
-              root = root.rightNode;
-              i++
-              if (root.leftNode === null) break;
-            } else {
-              root = root.leftNode;
-              if (root.leftNode === null) break;
+            if (this.root.value === value) {
+              if (this.root.leftNode) {
+                return this.root = this.root.leftNode;
+              } else {
+                return this.root = this.root.rightNode
+              };
             };
-          };
 
-          this.deleteItem(root.value, node);
-          return node.value = root.value;
+            if (node.leftNode !== null) {
+              return node.leftNode;
+            } else {
+              return node.rightNode;
+            };
+        } else if (node.leftNode !== null && node.rightNode !== null) {
+
+            let nodesSuccessor = node;
+            let i = 0;
+            while(nodesSuccessor !== null) {
+              if (i === 0) {
+                nodesSuccessor = nodesSuccessor.rightNode;
+                i++
+                if (nodesSuccessor.leftNode === null) break;
+              } else {
+                nodesSuccessor = nodesSuccessor.leftNode;
+                if (nodesSuccessor.leftNode === null) break;
+              };
+            };
+
+            this.deleteItem(nodesSuccessor.value, node);
+
+            nodesSuccessor.leftNode = node.leftNode;
+            nodesSuccessor.rightNode = node.rightNode;
+
+            node.leftNode = null;
+            node.rightNode = null;
+
+            if (this.root.value === value) return this.root = nodesSuccessor;
+
+            return nodesSuccessor;
         };
     };
-
-
     return node;
-  };
-
-  deleteItemV2(value) {
-    if (this.includes(value) === false) return;
-
-    let parentOfNodeToBeDeleted = this.root;
-    let nodeToBeDeleted = this.root;
-
-    function searchForNodeThatWillBeDel(root, value) {
-      if (root.value === value) {
-        deleteNodeWhenNodeIsLeaf(root, value);
-        deleteNodeWhenNodeHas1Child(root, value);
-        delteNodeWhenNodeHas2TwoChild(root, value);
-        return; 
-      } else if (root.value > value) {
-        parentOfNodeToBeDeleted = root;
-        nodeToBeDeleted = root.leftNode;
-        return searchForNodeThatWillBeDel(root.leftNode, value);
-      } else if (root.value < value) {
-        parentOfNodeToBeDeleted = root;
-        nodeToBeDeleted = root.rightNode;
-        return searchForNodeThatWillBeDel(root.rightNode, value);
-      };
-    };
-    searchForNodeThatWillBeDel(this.root, value);
-   
-    function deleteNodeWhenNodeIsLeaf(root, value) {
-      if (root.leftNode === null &&
-          root.rightNode === null) {
-        if (parentOfNodeToBeDeleted.leftNode.value === value) {
-          parentOfNodeToBeDeleted.leftNode = null;
-        } else {
-          parentOfNodeToBeDeleted.rightNode = null;
-        };
-      } else {
-        return;
-      };
-    };
-
-    function deleteNodeWhenNodeHas1Child(root, value) {
-      if ((root.leftNode === null && root.rightNode !== null) ||
-          (root.leftNode !== null && root.rightNode === null)) {
-        if (parentOfNodeToBeDeleted.leftNode.value === value) {
-          if (nodeToBeDeleted.leftNode === null) {
-            parentOfNodeToBeDeleted.leftNode = nodeToBeDeleted.rightNode;
-          } else {
-            parentOfNodeToBeDeleted.leftNode = nodeToBeDeleted.leftNode;
-          };
-        };
-        if (parentOfNodeToBeDeleted.rightNode.value === value) {
-          if (nodeToBeDeleted.leftNode === null) {
-            parentOfNodeToBeDeleted.rightNode = nodeToBeDeleted.rightNode;
-          } else {
-            parentOfNodeToBeDeleted.rightNode = nodeToBeDeleted.leftNode;
-          }; 
-        };
-      } else {
-        return;
-      };
-    };
-
-    function delteNodeWhenNodeHas2TwoChild(root, value) {
-      if (root.leftNode !== null &&
-          root.rightNode !== null) {
-
-        const parentOftheSuccesorOfNodeToBeDeleted = findTheSuccesorOfNode(nodeToBeDeleted).parentOfTheSuccesor;    
-        const theSuccesorOfNodeToBeDeleted = findTheSuccesorOfNode(nodeToBeDeleted).theSuccesor;
-              
-        let oldParentOfNodeToBeDeleted = parentOfNodeToBeDeleted;
-        let oldNodeToBeDeleted = nodeToBeDeleted;
-
-        parentOfNodeToBeDeleted = parentOftheSuccesorOfNodeToBeDeleted;
-        nodeToBeDeleted = theSuccesorOfNodeToBeDeleted;
-
-        searchForNodeThatWillBeDel(nodeToBeDeleted, nodeToBeDeleted.value);
-
-        console.log(theSuccesorOfNodeToBeDeleted, parentOftheSuccesorOfNodeToBeDeleted);
-
-        theSuccesorOfNodeToBeDeleted.leftNode = oldNodeToBeDeleted.leftNode;
-        theSuccesorOfNodeToBeDeleted.rightNode = oldNodeToBeDeleted.rightNode;
-
-        if (oldParentOfNodeToBeDeleted.leftNode.value === oldNodeToBeDeleted.value) {
-          oldParentOfNodeToBeDeleted.leftNode = theSuccesorOfNodeToBeDeleted;
-        } else {
-          oldParentOfNodeToBeDeleted.rightNode = theSuccesorOfNodeToBeDeleted;
-        }
-        //
-        
-      } else {
-        return;
-      };
-    };
-
-    function findTheSuccesorOfNode(node) {
-      let parentOfTheSuccesor = node;
-      let theSuccesor = node;
-
-      for (let i = 0;; i++) {
-        if (i === 0) {
-          parentOfTheSuccesor = theSuccesor;
-          theSuccesor = theSuccesor.rightNode;
-        };
-        if (i > 0) {
-          if (theSuccesor.leftNode === null) {
-            break;
-          }
-          parentOfTheSuccesor = theSuccesor;
-          theSuccesor = theSuccesor.leftNode;
-        };
-      };
-      return {
-        parentOfTheSuccesor,
-        theSuccesor,
-      };
-    };
-
-
-
   };
 
 };
 
 //const arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
-const arr = [10, 5, 20, 15, 21, 23, 29];
+//const arr = [10, 5, 20, 15, 21, 23, 29];
+const arr = [10, 5, 15, 16];
 
 const myTree = new Tree(arr);
 
-console.log(myTree.root);
 //console.log(myTree.includes(1));
 //console.log(myTree.insertRecursively(325));
 //console.log(myTree.insertIteratively(22));
-//console.log(myTree.deleteItem(20));
-myTree.deleteItem(21, myTree.root);
-myTree.deleteItem(29, myTree.root);
-myTree.deleteItem(20, myTree.root);
-myTree.deleteItem(23, myTree.root);
+myTree.deleteItem(15, myTree.root);
+
+
 console.log(myTree);
