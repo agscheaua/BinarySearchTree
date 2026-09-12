@@ -285,6 +285,29 @@ class Tree {
     runCallBackForEachVal();
   };
 
+  inOrderForEach(callBack) {
+    function inOrderTraversalTree(root) {
+      if (root === null) return;
+
+      inOrderTraversalTree(root.leftNode);
+      callBack(root.value);
+      inOrderTraversalTree(root.rightNode);
+    };
+    inOrderTraversalTree(this.root);
+  };
+
+  preOrderForEach(callBack) {
+    function preOrderTraversalTree(root) {
+      if (root === null) return;
+
+      callBack(root.value);
+      preOrderTraversalTree(root.leftNode);
+      preOrderTraversalTree(root.rightNode);
+    };
+    preOrderTraversalTree(this.root);
+  };
+
+
 };
 
 //const arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
@@ -297,6 +320,8 @@ const myTree = new Tree(arr);
 //console.log(myTree.insertIteratively(22));
 //myTree.deleteItem(15, myTree.root);
 //myTree.levelOrderForEach(console.log);
-myTree.levelOrderForEachRecur(console.log);
+//myTree.levelOrderForEachRecur(console.log);
+myTree.inOrderForEach(console.log);
+myTree.preOrderForEach(console.log);
 
 console.log(myTree);
