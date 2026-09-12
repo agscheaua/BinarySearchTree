@@ -1,0 +1,20 @@
+deleteItem(value, node) - public method {
+arguments:
+value - a value to be searched and then deleted, if the value does not exist it will return nothing.
+node - a tree, where each node has a value propery, a leftNode property pointing at the left node or null, and a rightNode property pointing at the right node or null.
+
+execution:
+It recursively search the tree, comparing the value searched to the current node value, and based on values comparation it will search the left or right node, it will continue this procces till it find the value that needs to be deleted.
+It will start from the root of the tree, then it will assign to its right or left subtree, the return of the execution of that node left or right subtree based on the value that node has in comparation to the value searched, and afterwords the whole subtree with its mofified changes.
+
+We have A and we find that A.leftNode contain the value that we need to delete, we assing A.leftNode = the retunrn of the deleteItem(val, A.leftNode), the the A.leftNode will be modified, and afterword, as we have also call deleteItem(val, A), where A is left or right node to some other node, we return A, with is left subtree now modified, an so on till we reach the root of the whole tree. So we return the tree in the new form with the node deleted.
+};
+
+levelOrderForEach(callBack), levelOrderForEachRecur(callBack) {
+argument:
+callBack - a function UNINVOKED, without parantheses,
+
+execution:
+There are 2 variants for this method, iteratively and recursively, they conceptually do the same thing.
+We create a empty array, and we will be using it as a queue, we take the first node and enqueue its value, we call the callBack function on it, then we enqueue its left and right node, after words we dequeue the first value, and repeat repeat the procces, we take the first value witch is the left node val of the last node that we dequeu, we run the callBack on its value we enqueue its left and right nodes (if it has), and we dequeu it, we then take the new first val witch is the right node of the first node that we dequeue, and this is in part the general ideea, code implementation can varry.
+};

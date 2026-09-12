@@ -1,7 +1,6 @@
 //import './styles.css'
 
-// class use to create instances of different root nodes and their
-// left and right sub-trees
+// class use to create instances of different root nodes and their left and right sub-trees;
 
 class Node {
   constructor(value = null, leftNode = null, rightNode = null) {
@@ -11,15 +10,14 @@ class Node {
   };
 };
 
-// class used to construct the a BBST, it is initialzed with an array
-// argument
+// class used to construct the BBST, it is initialzed with an array argument;
 
 class Tree {
   constructor(arr) {
     this.root = this.#buildTree(Tree.sortTheArr(Tree.removeDuplicatesFromArr(arr)));
   };
 
-  // removes any duplicates from the array given as an argument
+  // removes any duplicates from the array given as an argument;
 
   static removeDuplicatesFromArr(arr) {
     if (!(Array.isArray(arr))) throw new Error("The argument is not an array.");
@@ -28,7 +26,7 @@ class Tree {
     return arrWithoutDuplicates;
   }
 
-  // sort the array given as an argument
+  // sort the array given as an argument;
 
   static sortTheArr(arr) {
     if (!(Array.isArray(arr))) throw new Error("The argument is not an array.");
@@ -71,9 +69,8 @@ class Tree {
     };
   };
 
-  // build the tree from the array given as a argument to the Tree class
-  // this function is invoked every time a new instances of the Tree
-  // class is created
+  // build the tree from the array given as a argument to the Tree class;
+  // this function is invoked every time a new instances of the Tree class is created;
 
   #buildTree(arr) {
     if (arr.length === 0) return null;
@@ -89,13 +86,13 @@ class Tree {
     return new Node(arr[middleOfArr], this.#buildTree(leftHalfOfTheArr), this.#buildTree(rightHalfOfArr));
   };
 
-  // check if the inserted argument is a integer
+  // check if the inserted argument is a integer;
 
   static checkIfNumIsInteger(num) {
     if (!(Number.isInteger(num))) throw new Error("The argument is not an integer.");
   }
 
-  // check if a value exist in the tree
+  // check if a value exist in the tree;
 
   includes(value) {
     Tree.checkIfNumIsInteger(value);
@@ -115,7 +112,7 @@ class Tree {
     return checkIfTreeIncludes(this.root);
   };
 
-  // insert a new node in the tree recursively
+  // insert a new node in the tree recursively;
 
   insertRecursively(value) {
     Tree.checkIfNumIsInteger(value);
@@ -141,7 +138,7 @@ class Tree {
     return searchForPlaceToInsertNode(this.root);
   };
 
-  // insert a new node in the tree iteratively
+  // insert a new node in the tree iteratively;
 
   insertIteratively(value) {
     Tree.checkIfNumIsInteger(value);
@@ -171,7 +168,7 @@ class Tree {
     return this.root;
   };
 
-  // delete a node in the tree 
+  // delete a node in the tree, based on how many sub-trees it has;
 
   deleteItem(value, node) {
     if (node === null) return null;
@@ -235,18 +232,71 @@ class Tree {
     return node;
   };
 
+  // travers the tree in breadth-first level and call the callBack function;
+  // argument on each value;
+
+  levelOrderForEach(callBack) {
+    if (typeof callBack !== "function") throw new Error("The callback must be a function.");
+
+    let root = this.root;
+
+    if (this.root === null) throw new Error("The tree is empty");
+
+    let valuesNodes = [];
+    valuesNodes.push(root);
+
+    while (valuesNodes.length !== 0) {
+      callBack(valuesNodes[0].value);
+  
+      if (valuesNodes[0].leftNode !== null) {
+        valuesNodes.push(valuesNodes[0].leftNode);
+      };  
+      if (valuesNodes[0].rightNode !== null) {
+        valuesNodes.push(valuesNodes[0].rightNode);
+      };
+
+      valuesNodes.shift();
+    };
+  };
+
+  levelOrderForEachRecur(callBack) {
+    if (typeof callBack !== "function") throw new Error("The callback must be a function.");
+    let root = this.root;
+    if (this.root === null) throw new Error("The tree is empty");
+
+    let valuesNodes = [];
+    valuesNodes.push(root);
+
+    function runCallBackForEachVal() {
+      if (valuesNodes.length === 0) return;
+
+      callBack(valuesNodes[0].value);
+
+      if (valuesNodes[0].leftNode !== null) {
+        valuesNodes.push(valuesNodes[0].leftNode);
+      };  
+      if (valuesNodes[0].rightNode !== null) {
+        valuesNodes.push(valuesNodes[0].rightNode);
+      };
+
+      valuesNodes.shift();
+      return runCallBackForEachVal();
+    };
+    runCallBackForEachVal();
+  };
+
 };
 
 //const arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
-//const arr = [10, 5, 20, 15, 21, 23, 29];
-const arr = [10, 5, 15, 16];
+const arr = [10, 5, 20, 15, 21, 23, 29];
 
 const myTree = new Tree(arr);
 
 //console.log(myTree.includes(1));
 //console.log(myTree.insertRecursively(325));
 //console.log(myTree.insertIteratively(22));
-myTree.deleteItem(15, myTree.root);
-
+//myTree.deleteItem(15, myTree.root);
+//myTree.levelOrderForEach(console.log);
+myTree.levelOrderForEachRecur(console.log);
 
 console.log(myTree);
