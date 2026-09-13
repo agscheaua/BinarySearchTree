@@ -1,5 +1,6 @@
 //import './styles.css'
 
+
 // class use to create instances of different root nodes and their left and right sub-trees;
 
 class Node {
@@ -259,6 +260,9 @@ class Tree {
     };
   };
 
+  // travers the tree in breadth-first level and call the callBack function;
+  // argument on each value; (level order traversal iteratively)
+
   levelOrderForEachRecur(callBack) {
     if (typeof callBack !== "function") throw new Error("The callback must be a function.");
     let root = this.root;
@@ -285,6 +289,9 @@ class Tree {
     runCallBackForEachVal();
   };
 
+  // travers the tree in breadth-first level and call the callBack function;
+  // argument on each value; 7
+
   inOrderForEach(callBack) {
     function inOrderTraversalTree(root) {
       if (root === null) return;
@@ -307,21 +314,51 @@ class Tree {
     preOrderTraversalTree(this.root);
   };
 
+  postOrderForEach(callBack) {
+    function postOrderTraversalTree(root) {
+      if (root === null) return;
+
+      postOrderTraversalTree(root.leftNode);
+      postOrderTraversalTree(root.rightNode);
+      callBack(root.value);
+    };
+    postOrderTraversalTree(this.root);
+  };
+
+  height(value) {
+    if (this.includes(value) === false) return undefined;
+
+    let root = this.root;
+
+    while (root.value !== value) {
+      if (root.value > value) {
+        root = root.leftNode;
+      } else if (root.value < value) {
+        root = root.rightNode;
+      };
+    }; 
+
+   
+
+
+  };
 
 };
 
 //const arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
-const arr = [10, 5, 20, 15, 21, 23, 29];
+const arr = [10, 5, 20];
 
 const myTree = new Tree(arr);
 
-//console.log(myTree.includes(1));
-//console.log(myTree.insertRecursively(325));
-//console.log(myTree.insertIteratively(22));
+//myTree.includes(1);
+//myTree.insertRecursively(325);
+//myTree.insertIteratively(22);
 //myTree.deleteItem(15, myTree.root);
 //myTree.levelOrderForEach(console.log);
 //myTree.levelOrderForEachRecur(console.log);
-myTree.inOrderForEach(console.log);
-myTree.preOrderForEach(console.log);
+//myTree.inOrderForEach(console.log);
+//myTree.preOrderForEach(console.log);
+//myTree.postOrderForEach(console.log);
+myTree.height(10);
 
 console.log(myTree);

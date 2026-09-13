@@ -12,9 +12,17 @@ We have A and we find that A.leftNode contain the value that we need to delete, 
 
 levelOrderForEach(callBack), levelOrderForEachRecur(callBack) {
 argument:
-callBack - a function UNINVOKED, without parantheses,
+callBack - a function UNINVOKED, without parantheses.
 
 execution:
 There are 2 variants for this method, iteratively and recursively, they conceptually do the same thing.
 We create a empty array, and we will be using it as a queue, we take the first node and enqueue its value, we call the callBack function on it, then we enqueue its left and right node, after words we dequeue the first value, and repeat repeat the procces, we take the first value witch is the left node val of the last node that we dequeu, we run the callBack on its value we enqueue its left and right nodes (if it has), and we dequeu it, we then take the new first val witch is the right node of the first node that we dequeue, and this is in part the general ideea, code implementation can varry.
 };
+
+inOrderForEach(callBack), preOrderForEach(callBack), and postOrderForEach(callBack) {
+arguments:
+callBack - a function UNINVOKED, without parantheses.
+
+execution:
+inside each method is a function that travers the tree in the specified order in, pre, or post. We recursively travers the node, till we find a null node, after witch the recursion depth stops and revers to the top, reading each node and its subtree in its specified way in the algorith. Some nodes can be read as we travers the tree, as in preorder, where the root is read first before left and right subtrees.
+}
