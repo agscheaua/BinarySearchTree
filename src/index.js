@@ -338,15 +338,40 @@ class Tree {
       };
     }; 
 
-   
+    let leftHeight = 0;
+    let rightHeight = 0;
 
+
+    function getLeftNodeHeight(node) {
+      if(node === null) return null;
+
+      getLeftNodeHeight(node.leftNode);
+      getLeftNodeHeight(node.rightNode);
+
+      leftHeight++;
+    };
+
+    getLeftNodeHeight(root);
+    
+
+    console.log(leftHeight);
+
+
+
+
+
+
+         
 
   };
 
+
+
+
 };
 
-//const arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
-const arr = [10, 5, 20];
+const arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
+//const arr = [10, 5, 20];
 
 const myTree = new Tree(arr);
 
@@ -359,6 +384,6 @@ const myTree = new Tree(arr);
 //myTree.inOrderForEach(console.log);
 //myTree.preOrderForEach(console.log);
 //myTree.postOrderForEach(console.log);
-myTree.height(10);
+myTree.height(8);
 
 console.log(myTree);
