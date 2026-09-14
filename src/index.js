@@ -1,6 +1,5 @@
 //import './styles.css'
 
-
 // class use to create instances of different root nodes and their left and right sub-trees;
 
 class Node {
@@ -357,10 +356,28 @@ class Tree {
     return getHeightNode(root);
   };
 
+  depth(value) {
+    if (this.includes(value) === false) return undefined;
 
+    let root = this.root;
+    let nodeDepth = 0;
 
+    if (root === null) return nodeDepth;
+
+    while(root.value !== value) {
+      if (root.value > value) {
+        root = root.leftNode;
+        nodeDepth++
+      } else if (root.value < value) {
+        root = root.rightNode;
+        nodeDepth++
+      };
+    };
+    return nodeDepth;
+  };
 
 };
+
 
 const arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
 //const arr = [10, 5, 20];
@@ -376,6 +393,7 @@ const myTree = new Tree(arr);
 //myTree.inOrderForEach(console.log);
 //myTree.preOrderForEach(console.log);
 //myTree.postOrderForEach(console.log);
-console.log(myTree.height(8));
+//myTree.height(8);
+
 
 console.log(myTree);
