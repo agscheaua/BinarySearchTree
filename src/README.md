@@ -25,4 +25,12 @@ callBack - a function UNINVOKED, without parantheses.
 
 execution:
 inside each method is a function that travers the tree in the specified order in, pre, or post. We recursively travers the node, till we find a null node, after witch the recursion depth stops and revers to the top, reading each node and its subtree in its specified way in the algorith. Some nodes can be read as we travers the tree, as in preorder, where the root is read first before left and right subtrees.
+};
+
+height(value) {
+argumet:
+value - the value of the node to witch we need to get its height, or undefined.
+
+execution:
+It checks to see if any node in the tree contains the value search. It gets that node iteratively, traversing the tree till it finds it and assigne it to a variable. A node height is the longest path from that node till a leaf node. If a node has no subtrees, it return -1. EVERY SUBTREES OF A NODE, WILL END IN A LEAF NODE, EVEN IF THAT NODE OR ITS SUBTREES WILL NOT END IN A LEAF NODE, SOMEWHERE IT WILL. We check each node height and return it each node can be a left or right subtree of another node and so on, we take the biggest lenght of the two and we add 1 and we return the height of that node, node witch can be the left or right node of the node we need to finds it height.
 }

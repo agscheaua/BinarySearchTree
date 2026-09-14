@@ -338,31 +338,23 @@ class Tree {
       };
     }; 
 
-    let leftHeight = 0;
-    let rightHeight = 0;
-
-
-    function getLeftNodeHeight(node) {
-      if(node === null) return null;
-
-      getLeftNodeHeight(node.leftNode);
-      getLeftNodeHeight(node.rightNode);
-
-      leftHeight++;
+     function maxNr(val1, val2) {
+      if (val1 > val2) {
+        return val1;
+      } else {
+        return val2;
+      };
     };
 
-    getLeftNodeHeight(root);
+    function getHeightNode(root) {
+      if (root === null) return -1;
     
+      const leftSubtreeHeight = getHeightNode(root.leftNode);
+      const rightSubtreeHeight = getHeightNode(root.rightNode);
 
-    console.log(leftHeight);
-
-
-
-
-
-
-         
-
+      return maxNr(leftSubtreeHeight, rightSubtreeHeight) + 1;
+    };
+    return getHeightNode(root);
   };
 
 
@@ -384,6 +376,6 @@ const myTree = new Tree(arr);
 //myTree.inOrderForEach(console.log);
 //myTree.preOrderForEach(console.log);
 //myTree.postOrderForEach(console.log);
-myTree.height(8);
+console.log(myTree.height(8));
 
 console.log(myTree);
