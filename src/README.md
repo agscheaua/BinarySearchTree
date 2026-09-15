@@ -33,4 +33,12 @@ value - the value of the node to witch we need to get its height, or undefined.
 
 execution:
 It checks to see if any node in the tree contains the value search. It gets that node iteratively, traversing the tree till it finds it and assigne it to a variable. A node height is the longest path from that node till a leaf node. If a node has no subtrees, it return -1. EVERY SUBTREES OF A NODE, WILL END IN A LEAF NODE, EVEN IF THAT NODE OR ITS SUBTREES WILL NOT END IN A LEAF NODE, SOMEWHERE IT WILL. We check each node height and return it each node can be a left or right subtree of another node and so on, we take the biggest height of the two and we add 1 and we return the height of that node, node witch can be the left or right node of the node we need to finds it height.
-}
+};
+
+depth(value) {
+argumet:
+value - the value contained in a node, at witch the method stop traversing the tree and returns its depth.
+
+execution:
+It iteratively travers the tree, and at each travers, when it pass from one node (vertice) to another, we increment the depth returned by 1, the depth of a node is the length from the root of the tree till that node, the loop will break when we arrive at node containing the value we are looking for, and it will return the depth of that node.
+};

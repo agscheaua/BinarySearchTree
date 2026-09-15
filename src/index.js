@@ -15,6 +15,7 @@ class Node {
 class Tree {
   constructor(arr) {
     this.root = this.#buildTree(Tree.sortTheArr(Tree.removeDuplicatesFromArr(arr)));
+    this.unbalancedNodes = [];
   };
 
   // removes any duplicates from the array given as an argument;
@@ -376,6 +377,41 @@ class Tree {
     return nodeDepth;
   };
 
+  isBalanced() {
+    function maxNr(val1, val2) {
+      if (val1 > val2) {
+        return val1;
+      } else {
+        return val2;
+      };
+    };
+
+    let unbalancedNodes = [];
+
+    function getAllUnbalancedNodes(root) {
+      if (root === null) return -1;
+    
+      const leftSubtreeHeight = getAllUnbalancedNodes(root.leftNode);
+      const rightSubtreeHeight = getAllUnbalancedNodes(root.rightNode);
+
+      let heightDifferenceSubtrees = (leftSubtreeHeight - rightSubtreeHeight);
+      if (heightDifferenceSubtrees < 0) {
+        heightDifferenceSubtrees = heightDifferenceSubtrees * (-1);
+      };
+
+      if (!(heightDifferenceSubtrees <= 1)) { 
+        unbalancedNodes.push(root);
+      }
+
+      return maxNr(leftSubtreeHeight, rightSubtreeHeight) + 1;
+    };
+    getAllUnbalancedNodes(this.root);
+    console.log(unbalancedNodes);
+
+    if (unbalancedNodes.length !== 0) return false;
+    else return true;
+  };
+
 };
 
 
@@ -385,7 +421,8 @@ const arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
 const myTree = new Tree(arr);
 
 //myTree.includes(1);
-//myTree.insertRecursively(325);
+myTree.insertRecursively(325);
+myTree.insertRecursively(400);
 //myTree.insertIteratively(22);
 //myTree.deleteItem(15, myTree.root);
 //myTree.levelOrderForEach(console.log);
@@ -394,6 +431,7 @@ const myTree = new Tree(arr);
 //myTree.preOrderForEach(console.log);
 //myTree.postOrderForEach(console.log);
 //myTree.height(8);
-
+console.log(myTree.isBalanced());
+console.log(myTree.unbalancedNodes);
 
 console.log(myTree);
